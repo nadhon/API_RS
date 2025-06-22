@@ -1,0 +1,27 @@
+# Ambientes virtuais
+venv/
+.env/
+.venv/
+
+# Cache do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de log
+*.log
+
+# Configurações de IDEs e editores
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Arquivos temporários
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+
+# Dependências salvas
+pip-log.txt
