@@ -1,9 +1,5 @@
-from curses import flash
-from turtle import get_poly
-from urllib import request
-from flask import (Blueprint, flask, g, redirect, render_template, resquest, url_for)
+from flask import (Blueprint, flask, g, redirect, render_template, request, url_for, jsonify)
 from werkzeug.exceptions import abort
-
 from flaskr.auth import login_required 
 from flaskr.db import get_db 
 
@@ -83,4 +79,34 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+    return redirect(url_for('blog.index'))
+@db.route('/exportar-json')
+@login_required
+def exportar_json():
+    bd_conn = get_db()
+    posts = bd_conn.execute(
+        'SELECT p.id, title, body, created, author_id, username'
+        ' FROM post p JOIN user u ON p.author_id = u.id'
+        ' ORDER BY created DESC'
+    ).fetchall()
+
+    data_to_save = {
+        "mensagem": "Exportação manual de dados",
+        "exportado_em": datetime.now().isoformat(),
+        "posts": [
+            {
+                "id": post['id'],
+                "title": post['title'],
+                "body": post['body'],
+                "created": post['created'].isoformat(),
+                "author_id": post['author_id'],
+                "username": post['username']
+            } for post in posts 
+            
+        ]
+    }
+    json_path = os.path.join(os.path.dirname(__file__), 'exported_data.json')
+    with open(json_path, 'w', encoding= 'utf -8') as f:
+        json.dump(data_to_save, f, ensure_ascii=False, indent=4)
+    flash('Exportação para JSON realizada com sucesso!')
     return redirect(url_for('blog.index'))
