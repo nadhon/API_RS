@@ -1,21 +1,23 @@
-from flask import (Blueprint, flask, g, redirect, render_template, request, url_for, jsonify)
-from werkzeug.exceptions import abort
-from flaskr.auth import login_required 
-from flaskr.db import get_db 
+from flask import Blueprint, flask, g, redirect, render_template, request, url_for, jsonify, flash
+import os
+import json
+from datetime import datetime
 
-db =  Blueprint('blog',__name__)
+blog =  Blueprint('blog',__name__, url_prefix='/blog')
 
-@db.route('/')
+@blog.route('/')
 def index():
     db = get_db()
     posts = db.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
-    ).fetchall()
-    return render_template('blog/index.html', posts=posts)
+    """
+    SELECT p.id, title, body, created, author_id, username
+    FROM post p JOIN user u ON p.author_id = u.id
+    ORDER BY created DESC
+    """
+).fetchall()
+return render_template('blog/index.html', posts=posts)
 
-@db.route('/create', methods=('GET', 'POST'))
+@blog.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
     if request.method == 'POST':
@@ -29,17 +31,22 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
+                'INSERT INTO post (title, body, author_id) VALUES (?, ?, ?)',
                 (title, body, g.user['id'])
             )
             db.commit()
-    return redirect(url_for('blog.index'))
+            return redirect(url_for('blog.index'))
+    return render_template('blog/create.html')
 def get_post(id, check_outhor=True):
-    post = get_db().execute('SELECT p.id, title, body, created, author_id, username'
-                            'FROM post p JOIN user u ON p.outhor_id'
-                            'WHERE P.id = ?',
-                            (id,)).fetchone()
+    post = get_db().execute(
+        """
+        SELECT p.id, title, body, created, author_id, username
+        'FROM post p JOIN user u ON p.outhor_id'
+        WHERE P.id = ? 
+        """,
+        (id,)
+    ).fetchone()
+
     if post is None:
         abort(404, f"Post id {id} doesn't exist.")
     if check_outhor and post['author_id'] != g.user['id']:
@@ -47,7 +54,7 @@ def get_post(id, check_outhor=True):
     
     return post
 
-@db.route('/<int:id>/update', methods=('GET', 'POST'))
+@blog.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
     post = get_post(id)
@@ -64,30 +71,34 @@ def update(id):
         else:
             db = get_db()
             db.execute(
-                'UPDATE post SET title =?, body = ?'
-                'WHERE id = ?',
+                'UPDATE post SET title =?, body = ? WHERE id = ?',
                 (title, body, id)
             )
             db.commit()
             return redirect(url_for('blog.index'))
     return render_template('blog/update.html', post=post)
 
-@db.route('/<int:id>/delete', methods=('POST',))
+@blog.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
     get_post(id)
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+
     return redirect(url_for('blog.index'))
-@db.route('/exportar-json')
+
+    
+@blog.route('/exportar-json')
 @login_required
 def exportar_json():
     bd_conn = get_db()
     posts = bd_conn.execute(
-        'SELECT p.id, title, body, created, author_id, username'
-        ' FROM post p JOIN user u ON p.author_id = u.id'
-        ' ORDER BY created DESC'
+        """
+        SELECT p.id, title, body, created, author_id, username
+        FROM post p JOIN user u ON p.author_id = u.id
+        ORDER BY created DESC
+        """
     ).fetchall()
 
     data_to_save = {
