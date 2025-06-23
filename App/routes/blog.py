@@ -1,4 +1,5 @@
-from flask import Blueprint, flask, g, redirect, render_template, request, url_for, jsonify, flash
+from flask import Blueprint, g, redirect, render_template, request, url_for, jsonify, flash
+from flask_login import login_required
 import os
 import json
 from datetime import datetime
@@ -14,8 +15,8 @@ def index():
     FROM post p JOIN user u ON p.author_id = u.id
     ORDER BY created DESC
     """
-).fetchall()
-return render_template('blog/index.html', posts=posts)
+    ).fetchall()
+    return render_template('posts/index.html', posts=posts)
 
 @blog.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -35,13 +36,15 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/create.html')
-def get_post(id, check_outhor=True):
+            exportar_json()
+            flash('Creado com sucesso!')
+            return redirect(url_for('posts.index'))
+    return render_template('posts/create.html')
+def get_post(id, check_author=True):
     post = get_db().execute(
         """
         SELECT p.id, title, body, created, author_id, username
-        'FROM post p JOIN user u ON p.outhor_id'
+        'FROM post p JOIN user u ON p.author_id = u.id
         WHERE P.id = ? 
         """,
         (id,)
@@ -49,7 +52,7 @@ def get_post(id, check_outhor=True):
 
     if post is None:
         abort(404, f"Post id {id} doesn't exist.")
-    if check_outhor and post['author_id'] != g.user['id']:
+    if check_author and post['author_id'] != g.user['id']:
         abort(403)
     
     return post
@@ -75,8 +78,10 @@ def update(id):
                 (title, body, id)
             )
             db.commit()
-            return redirect(url_for('blog.index'))
-    return render_template('blog/update.html', post=post)
+            exportar_json()
+            flash('Atualizado com sucesso!')
+            return redirect(url_for('posts.index'))
+    return render_template('posts/update.html', post=post)
 
 @blog.route('/<int:id>/delete', methods=('POST',))
 @login_required
@@ -85,8 +90,10 @@ def delete(id):
     db = get_db()
     db.execute('DELETE FROM post WHERE id = ?', (id,))
     db.commit()
+    exportar_json()
+    flash('Deletado com sucesso!')
 
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('posts.index'))
 
     
 @blog.route('/exportar-json')
@@ -117,7 +124,7 @@ def exportar_json():
         ]
     }
     json_path = os.path.join(os.path.dirname(__file__), 'exported_data.json')
-    with open(json_path, 'w', encoding= 'utf -8') as f:
+    with open(json_path, 'w', encoding= 'utf-8') as f:
         json.dump(data_to_save, f, ensure_ascii=False, indent=4)
     flash('Exportação para JSON realizada com sucesso!')
-    return redirect(url_for('blog.index'))
+    return redirect(url_for('posts.index'))

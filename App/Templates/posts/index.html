@@ -18,7 +18,7 @@
                 </div>
                     {% if g.user['id']== post['user_id'] %}
                         <div class="actions">
-                            <a class="action" href="{{ url_for('posts.edit', post_id=post['id']) }}">Edit</a>
+                            <a class="action" href="{{ url_for('blog.update', post_id=post['id']) }}">Edit</a>
                         </div>
                     {% endif %}
             </header>
