@@ -1,10 +1,9 @@
-from flask import Blueprint, g, redirect, render_template, request, url_for, jsonify, flash
-from flask_login import login_required
+from flask import render_template, request, jsonify
 import os
 import json
 from datetime import datetime
 
-blog =  Blueprint('blog',__name__, url_prefix='/blog')
+blog =  Blueprint('blog',__name__)
 
 @blog.route('/')
 def index():
@@ -19,7 +18,6 @@ def index():
     return render_template('posts/index.html', posts=posts)
 
 @blog.route('/create', methods=('GET', 'POST'))
-@login_required
 def create():
     if request.method == 'POST':
         title = request.form['title']
@@ -58,7 +56,6 @@ def get_post(id, check_author=True):
     return post
 
 @blog.route('/<int:id>/update', methods=('GET', 'POST'))
-@login_required
 def update(id):
     post = get_post(id)
 
@@ -84,7 +81,6 @@ def update(id):
     return render_template('posts/update.html', post=post)
 
 @blog.route('/<int:id>/delete', methods=('POST',))
-@login_required
 def delete(id):
     get_post(id)
     db = get_db()
@@ -97,7 +93,6 @@ def delete(id):
 
     
 @blog.route('/exportar-json')
-@login_required
 def exportar_json():
     bd_conn = get_db()
     posts = bd_conn.execute(
