@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
-app= Flask(__name__)
-CORS(app, resources={r"/*": {{"origins": "*"}})
+app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-from app import blog
+from app import routes
