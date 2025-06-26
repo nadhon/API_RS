@@ -1,8 +1,7 @@
-from flask import Flask, render_template 
-from App.routes import blog
+from flask import Flask
+from flask_cors import CORS
 
-def create_app():
-    app = Flask(__name__)
-    app.register_blueprint(blog.bp)
+app= Flask(__name__)
+CORS(app, resources={r"/*": {{"origins": "*"}})
 
-    return app
+from app import blog
