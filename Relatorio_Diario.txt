@@ -28,4 +28,4 @@ feitas modificações na api onde foram colocadas as rotas corretamente porem n�
 
 27 de junho de 2025;
 
-correção de rotas e testes de aplicação. inicio 7 hrs pausa 10 hrs retomada 11:30 e encerramento as 
+correção de rotas e testes de aplicação. inicio 7 hrs pausa as 15 hrs e encerramento as 17 hrs. 
