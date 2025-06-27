@@ -1,0 +1,31 @@
+20 de junho de 2025;
+
+Criação do repositorio;
+
+21 de junho de 2025;
+
+revisão das ferramentas inicio as 8 hrs e encerramento as 14 hrs
+
+22 de junho de 2025;
+
+inicio do repositorio foram feitas a criação e desenvolvimento tendo seu inicio as 10 hrs e encerramento as 18 hrs.
+
+23 de junho de 2025;
+
+revisando erros e rotas, comecei as 14 horas e terminei agora de 18 horas.
+
+24 de junho de 2025;
+
+primeira reunião do grumo para auxilio e correção de erros recorrente inicio as 18 hrs e encerramento as 18:30 hrs.
+
+25 de junho de 2025;
+
+revisão do código e reunião para ver andamento do projeto com os outros componentes do grupo para possiveis correções.
+
+26 de junho de 2025;
+
+feitas modificações na api onde foram colocadas as rotas corretamente porem não foram testadas ainda. inicio as 14 hrs encerramento as 22 hrs.
+
+27 de junho de 2025;
+
+correção de rotas e testes de aplicação. inicio 7 hrs pausa 10 hrs retomada 11:30 e encerramento as 
