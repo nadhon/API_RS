@@ -51,9 +51,17 @@
         <div class="links">
             <a href="/usuarios">📋 Ver usuários</a>
             <a href="/say">💬 Mensagem da API</a>
-            <a href="/usuarios" id="route-link">➕ Adicionar Usuário</a>
-            <a href="/usuarios" id="route-link">✏️ Atualizar Usuário</a>
-            <a href="/usuarios" id="route-link">❌ Excluir Usuário</a>
+            <form action="/usuarios" method="post" style="display: inline;">
+                <input type="text" name="nome" placeholder="Nome do Usuário" required>
+                <input type="email" name="email" placeholder="Email do Usuário" required>
+                <button type="submit" id="route-link">➕ Criar Usuário</button>
+            </form>
+            <form action="/usuarios" method="post" style="display: inline;">
+                <button type="submit" id="route-link">✏️ Atualizar Usuário</button>
+            </form>
+            <form action="/usuarios" method="post" style="display: inline;">
+                <button type="submit" id="route-link">❌ Excluir Usuário</button>
+            </form>
         </div>
     </div>
 </body>

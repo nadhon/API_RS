@@ -15,7 +15,9 @@ def atualizar_usuario(id, nome, email):
     if usuario:
         usuario.nome = nome
         usuario.email = email
-        usuario.save()
+        return usuario
+    else:
+        raise Exception("Usuário não encontrado")
 
 def excluir_usuario(id):
     usuario = next((u for u in usuarios if u.id == id), None)
