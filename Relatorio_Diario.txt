@@ -33,3 +33,7 @@ correção de rotas e testes de aplicação. inicio 7 hrs pausa as 15 hrs contin
 28 de Junho de 2025;
 
 implementação do metodo adicionar e listar. inicio as 9 hrs pausa as 12 hrs continuidade as 14 hrs e encerramento as 19 hrs.
+
+29 de Junho de 2025;
+
+implementação do metodo atualizar e excluir. inicio 12 hrs pausa as 14 hrs continuidade as 15 hrs e encerramento as 22 hrs sem muito sucesso.

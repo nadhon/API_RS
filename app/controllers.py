@@ -23,3 +23,5 @@ def excluir_usuario(id):
     usuario = next((u for u in usuarios if u.id == id), None)
     if usuario:
         usuarios.remove(usuario)
+        return True
+    return False

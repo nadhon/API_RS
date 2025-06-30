@@ -33,29 +33,30 @@ def adicionar():
         email = request.form.get('email')
 
     if not nome or not email:
-        return jsonify({"error": "Nome e email são obrigatórios"}), 400
+        return jsonify({"error": "Nome e email obrigatórios"}), 400
 
     novo_usuario = adicionar_usuario(nome, email)
-    return jsonify(novo_usuario.to_dict()), 201
+    return jsonify({"message": "Usuario adicionado com sucesso!"}), 201
+    return jsonify(novo_usuario.to_dict()), 201 
 
-    # return render_template('adicionar_usuario.html') #reserve a rota para adicionar usuário via GET
 
-@app.route('/usuarios/<int:id>/excluir', methods=['DELETE'])
+
+@app.route('/usuarios/<int:id>', methods=['DELETE'])
 def excluir(id):
-    sucesso = excluir_usuario(id)
-    if sucesso:
+    usuario = excluir_usuario(id)
+    if usuario:
         return jsonify({"message": "Usuário excluído com sucesso!"}), 200
     else:
         return jsonify({"error": "Usuário não encontrado"}), 404
 
-@app.route('/usuarios/<int:id>/editar', methods=['PUT'])
+@app.route('/usuarios/<int:id>', methods=['PUT'])
 def editar(id):
     try:
         dados = request.get_json(silent=True)
 
         if not dados:
             return jsonify({"error": "Dados inválidos"}), 400
-        
+
         nome = dados.get('nome')
         email = dados.get('email')
         if not nome or not email:
