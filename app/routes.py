@@ -24,46 +24,52 @@ def listar_usuarios():
 
 @app.route('/usuarios', methods=['POST'])
 def adicionar():
-    dados = request.get_json(silent=True)
-    if dados:
-        nome = dados.get('nome')
-        email = dados.get('email')
-    else:
-        nome = request.form.get('nome')
-        email = request.form.get('email')
-
-    if not nome or not email:
-        return jsonify({"error": "Nome e email obrigatórios"}), 400
-
-    novo_usuario = adicionar_usuario(nome, email)
-    return jsonify({"message": "Usuario adicionado com sucesso!"}), 201
-    return jsonify(novo_usuario.to_dict()), 201 
-
-
-
-@app.route('/usuarios/<int:id>', methods=['DELETE'])
-def excluir(id):
-    usuario = excluir_usuario(id)
-    if usuario:
-        return jsonify({"message": "Usuário excluído com sucesso!"}), 200
-    else:
-        return jsonify({"error": "Usuário não encontrado"}), 404
-
-@app.route('/usuarios/<int:id>', methods=['PUT'])
-def editar(id):
     try:
         dados = request.get_json(silent=True)
+        if dados:
+            nome = dados.get('nome')
+            email = dados.get('email')
+        else:
+            nome = request.form.get('nome')
+            email = request.form.get('email')
 
-        if not dados:
-            return jsonify({"error": "Dados inválidos"}), 400
-
-        nome = dados.get('nome')
-        email = dados.get('email')
         if not nome or not email:
-            return jsonify({"error": "Nome e email são obrigatórios"}), 400
-        
+            return jsonify({"error": "Nome e email obrigatórios"}), 400
+
+        novo_usuario = adicionar_usuario(nome, email)
+        return jsonify({"message": "Usuario adicionado com sucesso!"}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+
+@app.route('/usuarios/excluir', methods=['DELETE', 'POST'])
+def excluir():
+    try:
+        id = int(request.form['id'])
+        usuario = excluir_usuario(id)
+        if not usuario:
+            return jsonify({"error": "Usuario não encontrado"}), 404
+        return jsonify({"message": "Usuario excluído com sucesso!", "usuario": usuario.to_dict()}), 200
+    except Exception as e:
+        return jsonify({"error": "Erro ao excluir usuario"}), 404
+
+@app.route('/usuarios/editar', methods=['PUT', 'POST'])
+def editar():
+    try:
+        id = int(request.form['id'])
+        nome = request.form['nome']
+        email = request.form['email']
+        if not nome or not email:
+            return jsonify({"error": "Nome e email obrigatórios"}), 400
         editar_usuario = atualizar_usuario(id, nome, email)
-        
-        return jsonify(editar_usuario.to_dict()), 200
+        return jsonify({"message": "Usuario editado com sucesso!", "usuario": editar_usuario.to_dict()}), 200
     except Exception as e:
         return jsonify({"error": "Erro ao editar usuário"}), 404
+    
+@app.before_request
+def tratamento():
+    if request.method == 'POST' and '_method' in request.form:
+        metodo =  request.form['_method'].upper()
+        if metodo in ['PUT', 'DELETE']:
+            request.environ['REQUEST_METHOD'] = metodo

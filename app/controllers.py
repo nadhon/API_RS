@@ -2,6 +2,9 @@ from app.models import Usuario
 from app.data import usuarios
 
 def adicionar_usuario(nome, email):
+    existe = next((u for u in usuarios if u.email == email), None)
+    if existe:
+        raise Exception("Usuario com este email já existe")
     usuario_id = len(usuarios) + 1
     novo_usuario = Usuario(usuario_id, nome, email)
     usuarios.append(novo_usuario)
@@ -17,11 +20,12 @@ def atualizar_usuario(id, nome, email):
         usuario.email = email
         return usuario
     else:
-        raise Exception("Usuário não encontrado")
+        raise Exception("Usuario não encontrado")
 
 def excluir_usuario(id):
     usuario = next((u for u in usuarios if u.id == id), None)
     if usuario:
         usuarios.remove(usuario)
-        return True
-    return False
+        return usuario
+    else:
+        raise Exception("Usuario não encontrado")
