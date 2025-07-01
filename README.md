@@ -15,19 +15,18 @@ Ideal para projetos de estudo, integração com front-end (HTML, JS, React, etc)
 
 1. Clone o repositório:
 
-```bash
+```
 git clone https://github.com/nadhon/API_RS.git
 ````
 
 2. Instale as dependências (caso não tenha o Flask):
-
-```bash
+```
 pip install flask
 ```
 
 3. Rode o projeto:
 
-```bash
+```
 python run.py
 ```
 
