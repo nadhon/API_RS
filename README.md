@@ -1,6 +1,4 @@
-Manda ver, Maguiaro! Aqui vai um modelo de `README.md` direto ao ponto, bem documentado e ideal pra qualquer dev front-end (ou back-end) que for usar tua API REST de usuários:
 
----
 
 ````markdown
 # 🧠 API de Gerenciamento de Usuários
