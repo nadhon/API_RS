@@ -1,85 +1,168 @@
-                API de Usuários – CRUD com Flask
-_________________________________________________________________
+Manda ver, Maguiaro! Aqui vai um modelo de `README.md` direto ao ponto, bem documentado e ideal pra qualquer dev front-end (ou back-end) que for usar tua API REST de usuários:
 
-Este repositório foi criado com a finalidade de entregar as atividades da residência, desenvolvendo uma API funcional utilizando Python e Flask.
-_________________________________________________________________
-A aplicação implementa um CRUD completo de usuários, com:
+---
 
-Armazenamento em uma lista Python (usuarios)
+````markdown
+# 🧠 API de Gerenciamento de Usuários
 
-Respostas no formato JSON
+Esta é uma API REST simples feita com Flask, que simula um banco de dados utilizando um arquivo JSON (`usuarios.json`) como persistência de dados.
 
-Interface HTML simples e funcional
+Ideal para projetos de estudo, integração com front-end (HTML, JS, React, etc) ou testes em ferramentas como Postman/Insomnia.
 
-Suporte a métodos POST, PUT, DELETE (simulados via formulário)
-_____________________________________________________________________________________________________________________________
+---
 
-                🚀 Funcionalidades da API
-_____________________________________________________________________________________________________________________________
+## 🚀 Como rodar o projeto
 
-                    Criar usuários:
-_____________________________________________________________________________________________________________________________
+1. Clone o repositório:
 
-        Adiciona um novo usuário com nome e e-mail à lista Python.
-_____________________________________________________________________________________________________________________________
+```bash
+git clone https://github.com/seuusuario/nome-do-projeto.git
+````
 
-                    Listar usuários
+2. Instale as dependências (caso não tenha o Flask):
 
-                    📋 Ver usuários (link que mostra a lista de usuarios cadastrados em json)
-_____________________________________________________________________________________________________________________________
+```bash
+pip install flask
+```
 
-        Retorna todos os usuários cadastrados em formato JSON.
-_____________________________________________________________________________________________________________________________
+3. Rode o projeto:
 
-                    Editar usuários
-_____________________________________________________________________________________________________________________________
+```bash
+python run.py
+```
 
-        Permite atualizar o nome e o e-mail de um usuário existente, usando o ID informado.
-_____________________________________________________________________________________________________________________________
+---
 
-Excluir usuários
-_____________________________________________________________________________________________________________________________
+## 📁 Estrutura do Projeto
 
-Remove um usuário da lista com base no ID informado.
-_____________________________________________________________________________________________________________________________
+```
+📂 app/
+│
+├── __init__.py           # Cria e configura a aplicação Flask
+├── app.py                # Entrada da API (pode ser mesclado com run.py)
+├── controller.py         # Funções de controle (CRUD)
+├── data.py               # Simula banco de dados com arquivo JSON
+├── models.py             # Classe Usuario
+├── routes/
+│   └── routes.py         # Rotas da API (GET, POST, PUT, DELETE)
+├── templates/
+│   └── index.html        # Interface HTML (opcional)
+│
+├── usuarios.json         # Arquivo com dados persistentes
+└── run.py                # Inicializa a aplicação
+```
 
-                    💻 Interface HTML
-_____________________________________________________________________________________________________________________________
+---
 
-A interface foi feita com HTML puro, sem uso de JavaScript. Os formulários permitem:
-_____________________________________________________________________________________________________________________________
+## 📬 Rotas da API
 
-                    Cadastrar novos usuários
+### 🔹 `GET /usuarios`
 
-                    Lista de usuarios 
+Retorna a lista de todos os usuários.
 
-                    Editar usuários existentes
+**Resposta:**
 
-                    Excluir usuários da lista
-_________________________________________________________________
+```json
+{
+  "usuarios": [
+    { "id": 1, "nome": "João", "email": "joao@email.com" }
+  ]
+}
+```
 
-O método PUT e DELETE são simulados através do uso de um campo oculto _method e tratados no backend com @app.before_request.
-_________________________________________________________________
+---
 
-                        🔙 Retorno em JSON
-_________________________________________________________________
+### 🔹 `POST /usuarios`
 
-Todas as ações (criar, editar, excluir) retornam respostas no formato JSON, contendo:
+Adiciona um novo usuário.
 
-_________________________________________________________________
+**Corpo esperado (JSON ou formulário):**
 
-Mensagens de sucesso ou erro
+```json
+{
+  "nome": "Joana",
+  "email": "joana@email.com"
+}
+```
 
-Dados do usuário afetado
+**Resposta:**
 
-📂 Estrutura do Projeto
+```json
+{
+  "usuario": { "id": 2, "nome": "Joana", "email": "joana@email.com" }
+}
+```
 
-📂app
-    📂 routes
-    📂 templates/ index.html
-init.py          código principal para 
-app.py           iniciar a api
-controller.py    ordem de parametros para a utilização da api
-data.py          aqui ficam armazenados os usuarios
-routes.py        as rotas onde a mágica é feita e as rotas se comunicam.
-run.py           roda as aplicações com percistencia
+---
+
+### 🔹 `PUT /usuarios/<id>`
+
+Atualiza um usuário existente.
+
+**Corpo:**
+
+```json
+{
+  "nome": "Joana Silva",
+  "email": "joana.silva@email.com"
+}
+```
+
+**Resposta:**
+
+```json
+{ "message": "Usuário atualizado" }
+```
+
+---
+
+### 🔹 `DELETE /usuarios/<id>`
+
+Remove um usuário existente.
+
+**Resposta:**
+
+```json
+{ "message": "Usuário excluído com sucesso!" }
+```
+
+---
+
+## 💡 Compatibilidade com Formulários HTML
+
+Formulários que simulam `PUT` ou `DELETE` via:
+
+```html
+<input type="hidden" name="_method" value="DELETE">
+```
+
+São suportados graças a este código no `app.py`:
+
+```python
+@app.before_request
+def tratamento():
+    if request.method == 'POST' and '_method' in request.form:
+        metodo =  request.form['_method'].upper()
+        if metodo in ['PUT', 'DELETE']:
+            request.environ['REQUEST_METHOD'] = metodo
+```
+
+E há uma rota auxiliar:
+
+```python
+@app.route('/usuarios/excluir', methods=['DELETE', 'POST'])
+```
+
+---
+
+## 🗃️ Persistência de Dados
+
+* Todos os usuários são armazenados no arquivo `usuarios.json`
+* A API carrega esses dados automaticamente ao iniciar
+* Alterações (add, update, delete) são salvas imediatamente
+
+---
+
+## 👨‍💻 Desenvolvido por
+
+Nadhon 
