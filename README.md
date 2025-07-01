@@ -16,7 +16,7 @@ Ideal para projetos de estudo, integração com front-end (HTML, JS, React, etc)
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/seuusuario/nome-do-projeto.git
+git clone https://github.com/nadhon/API_RS.git
 ````
 
 2. Instale as dependências (caso não tenha o Flask):
@@ -152,6 +152,15 @@ E há uma rota auxiliar:
 ```python
 @app.route('/usuarios/excluir', methods=['DELETE', 'POST'])
 ```
+---
+caso queira remover a rota @app.before_request só trocar os 
+post do código das rotas para sua funcionalidade e acrescentar 
+o metodo: 
+fetch('/usuarios/<id>', {
+  method: 'DELETE'
+})
+.then(res => res.json())
+.then(data => console.log(data));
 
 ---
 
