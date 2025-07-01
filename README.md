@@ -174,4 +174,4 @@ fetch('/usuarios/<id>', {
 
 ## 👨‍💻 Desenvolvido por
 
-Nadhon josé
+Nadhon josé ⚔️
